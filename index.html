@@ -188,19 +188,35 @@
 
 
             // draw dots into the scatterplot
-            var mCircle = d3.symbol().type(d3.symbolCircle).size(8)();
-            var mCross= d3.symbol().type(d3.symbolCross).size(8)();
+            var mCircle = d3.symbol().type(d3.symbolCircle).size(20)();
+            var mCross= d3.symbol().type(d3.symbolCross).size(20)();
+
             svg.selectAll(".dot")
                 .data(data)
-                .enter().append("path")
-                .attr("transform", function (d) { console.log(data); return "translate(" + scatterXScale(d.x) + "," + scatterYScale(d.y) + ")" })
+                .enter()
+                .append("path")
+                .attr("transform", function (d) {return "translate(" + scatterXScale(d.x) + "," + scatterYScale(d.y) + ")" })
                 .attr("d", function (d) {
-                    if (modelPredictions[id = d.id] == '0' || groundTruth[id= d.id] == '0') {
+                    if (groundTruth[d.id] == 0) {
                         return mCircle;
                     } else {
                         return mCross;
                     }
                 })
+                .attr("fill", "none")
+                .attr("stroke", function(d){
+                    gt_value = groundTruth[d.id];
+                    predicted_value = modelPredictions[d.id];
+
+                    if((gt_value == 0 && predicted_value == 0) || (gt_value == 1 && predicted_value == 1)){
+                        return "green";
+                    } else if((gt_value == 0 && predicted_value == 1) || (gt_value == 1 && predicted_value == 0)){
+                        return "red";
+                    } else{
+                        return "black";
+                    }
+                })
+        }
         /* END SCATTERPLOT CODE */
 
         /* CONFUSION MATRIX CODE - YOU WILL NEED TO CHANGE THIS */
