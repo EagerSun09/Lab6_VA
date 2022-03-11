@@ -188,16 +188,19 @@
 
 
             // draw dots into the scatterplot
+            var mCircle = d3.symbol().type(d3.symbolCircle).size(8)();
+            var mCross= d3.symbol().type(d3.symbolCross).size(8)();
             svg.selectAll(".dot")
                 .data(data)
-                .enter().append("circle")
-                    .attr("class", "dot")
-                    .attr("r", 2.5)
-                    .attr('fill', 'none')
-                    .attr('stroke', 'blue')
-                    .attr("cx", (d) => scatterXScale(d.x))
-                    .attr("cy", (d) => scatterYScale(d.y))
-        }
+                .enter().append("path")
+                .attr("transform", function (d) { console.log(data); return "translate(" + scatterXScale(d.x) + "," + scatterYScale(d.y) + ")" })
+                .attr("d", function (d) {
+                    if (modelPredictions[id = d.id] == '0' || groundTruth[id= d.id] == '0') {
+                        return mCircle;
+                    } else {
+                        return mCross;
+                    }
+                })
         /* END SCATTERPLOT CODE */
 
         /* CONFUSION MATRIX CODE - YOU WILL NEED TO CHANGE THIS */
